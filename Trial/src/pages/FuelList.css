@@ -1,0 +1,33 @@
+.fuel-list {
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    max-width: 90%;
+    margin: auto;
+  }
+  
+  .fuel-list h2 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .fuel-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .fuel-list th,
+  .fuel-list td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .fuel-list th {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+  
