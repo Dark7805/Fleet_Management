@@ -1,4 +1,8 @@
 /* Base Styles */
+body{
+  height: 100%;
+  width: 100%;
+}
 .auth-container {
     display: flex;
     justify-content: center;
@@ -6,6 +10,7 @@
     min-height: 100vh;
     background-color: #f5f7fa;
     padding: 2rem;
+    color: black;
   }
   
   .auth-card {

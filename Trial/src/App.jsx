@@ -1,7 +1,7 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
+import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import AddVehicle from "./pages/AddVehicle";
 import VehicleGroups from "./pages/VehicleGroups";
@@ -18,49 +18,177 @@ import Remainder from "./pages/Remainder";
 import AddRemainder from "./pages/AddRemainder";
 import Tracking from "./pages/Tracking";
 import Login from "./login/Login";
-import { AuthProvider } from "./components/AuthContext";
+import Signup  from './login/Signup'
+import { AuthProvider, useAuth } from "./components/AuthContext";
 
 import "./App.css";
-const { isAuthenticated } = useAuth();
 
-function App() {
+function ProtectedRoute({ children }) {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+}
+
+function AppContent() {
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
+
+  // Hide Navbar on login page
+  const hideNavbar = location.pathname === "/login" || location.pathname==="/signup";
+ 
   return (
     <div className="main-container">
-      <Navbar />
+      {!hideNavbar && <Navbar />}
       <div className="content">
         <Routes>
-          {/* Dashboard */}
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/signup" element={<Signup />} />
 
-          {/* Vehicles */}
-          <Route path="/vehicles" element={<Vehicles />} />
-          <Route path="/vehicles/add" element={<AddVehicle />} />
-          <Route path="/vehicles/groups" element={<VehicleGroups />} />
+          {/* Protected Routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/vehicles"
+            element={
+              <ProtectedRoute>
+                <Vehicles />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/vehicles/add"
+            element={
+              <ProtectedRoute>
+                <AddVehicle />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/vehicles/groups"
+            element={
+              <ProtectedRoute>
+                <VehicleGroups />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Drivers */}
-          <Route path="/drivers" element={<Drivers />} />
-          <Route path="/drivers/add" element={<AddDriver />} />
+          <Route
+            path="/drivers"
+            element={
+              <ProtectedRoute>
+                <Drivers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/drivers/add"
+            element={
+              <ProtectedRoute>
+                <AddDriver />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Bookings */}
-          <Route path="/bookings" element={<Bookings />} />
-          <Route path="/bookings/new" element={<CreateBooking />} />
+          <Route
+            path="/bookings"
+            element={
+              <ProtectedRoute>
+                <Bookings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/bookings/new"
+            element={
+              <ProtectedRoute>
+                <CreateBooking />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Customers */}
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/customers/add" element={<AddCustomer />} />
+          <Route
+            path="/customers"
+            element={
+              <ProtectedRoute>
+                <Customers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customers/add"
+            element={
+              <ProtectedRoute>
+                <AddCustomer />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Fuel */}
-          <Route path="/fuel" element={<Fuel />} />
-          <Route path="/fuel/add" element={<AddFuel />} />
+          <Route
+            path="/fuel"
+            element={
+              <ProtectedRoute>
+                <Fuel />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/fuel/add"
+            element={
+              <ProtectedRoute>
+                <AddFuel />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Reminders */}
-          <Route path="/remainders" element={<Remainder />} />
-          <Route path="/remainders/add" element={<AddRemainder />} />
-          <Route path="/tracking" element={<Tracking />} />
+          <Route
+            path="/remainders"
+            element={
+              <ProtectedRoute>
+                <Remainder />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/remainders/add"
+            element={
+              <ProtectedRoute>
+                <AddRemainder />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tracking"
+            element={
+              <ProtectedRoute>
+                <Tracking />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Redirect unknown routes */}
+          <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaUser, FaLock, FaEnvelope, FaUserPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import './Auth.css';
 
 const Signup = () => {
@@ -24,11 +25,11 @@ const Signup = () => {
       alert("Passwords don't match!");
       return;
     }
-    
+
     setLoading(true);
     try {
       // Replace with your actual signup API call
-      // await axios.post('/api/auth/signup', formData);
+       await axios.post('http://localhost:5000/api/signup', formData);
       console.log('Signup data:', formData);
       alert('Account created successfully!');
     } catch (error) {

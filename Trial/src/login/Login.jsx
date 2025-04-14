@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaUser, FaLock, FaEnvelope, FaSignInAlt } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext'; // make sure this path is correct
 import './Auth.css';
 
 const Login = () => {
@@ -10,6 +11,10 @@ const Login = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth(); // from AuthContext
+  const from = location.state?.from?.pathname || '/dashboard'; // fallback to dashboard
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,10 +25,16 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Replace with your actual login API call
-      // await axios.post('/api/auth/login', formData);
-      console.log('Login data:', formData);
-      alert('Login successful!');
+      // Replace with actual login API logic if needed
+      const { email, password } = formData;
+
+      if (email === 'admin@example.com' && password === 'admin') {
+        login(); // sets isAuthenticated to true
+        navigate(from, { replace: true }); // redirect to previous or dashboard
+        console.log('Login successful');
+      } else {
+        alert('Invalid credentials');
+      }
     } catch (error) {
       console.error('Login error:', error);
       alert('Login failed');
