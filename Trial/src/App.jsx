@@ -17,8 +17,11 @@ import AddFuel from "./pages/AddFuel";
 import Remainder from "./pages/Remainder";
 import AddRemainder from "./pages/AddRemainder";
 import Tracking from "./pages/Tracking";
+import Login from "./login/Login";
+import { AuthProvider } from "./components/AuthContext";
 
 import "./App.css";
+const { isAuthenticated } = useAuth();
 
 function App() {
   return (
@@ -27,7 +30,8 @@ function App() {
       <div className="content">
         <Routes>
           {/* Dashboard */}
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
 
           {/* Vehicles */}
           <Route path="/vehicles" element={<Vehicles />} />
