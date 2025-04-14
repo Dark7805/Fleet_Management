@@ -1,57 +1,79 @@
-.driver-list-container {
-  max-width: 1200px;
-  margin: 30px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Drivers Styles */
+.drivers-dashboard {
+  padding: 2rem;
+  background-color: #f5f7fa;
+  min-height: 100vh;
 }
 
-.driver-list-container h2 {
-  font-size: 28px;
-  margin-bottom: 20px;
-  color: #333;
-  text-align: center;
+/* Header Styles */
+.drivers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--light-gray);
 }
 
-.driver-table {
+.drivers-header h2 {
+  color: var(--dark);
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Table Styles */
+.drivers-table-container {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.drivers-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  font-size: 0.9rem;
 }
 
-.driver-table thead {
-  background-color: #f0f0f0;
-}
-
-.driver-table th,
-.driver-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  font-size: 15px;
-}
-
-.driver-table th {
-  color: #444;
-}
-
-.driver-table tbody tr:hover {
-  background-color: #f9f9f9;
-}
-
-.delete-btn {
-  background-color: #ff4d4d;
+.drivers-table th {
+  background-color: var(--primary);
   color: white;
-  padding: 8px 14px;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+}
+
+.drivers-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--light-gray);
+  color: var(--dark);
+}
+
+.driver-row:hover {
+  background-color: rgba(67, 97, 238, 0.05);
+}
+
+/* Action Buttons */
+.delete-btn {
+  background: none;
   border: none;
-  border-radius: 8px;
+  color: var(--danger);
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 4px;
 }
 
 .delete-btn:hover {
-  background-color: #e60000;
+  background-color: rgba(247, 37, 133, 0.1);
+  transform: scale(1.1);
 }

@@ -1,7 +1,6 @@
-import React from "react";
-import "./AddVehicles.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import "./AddVehicles.css";
 
 const AddVehicle = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +11,7 @@ const AddVehicle = () => {
     engineNumber: "",
     manufacturedBy: "",
     vehicleType: "",
-    vehicleColour: "",
+    vehicleColour: "#ffffff", // Default to white hex color
     registrationExpiryDate: "",
     vehicleGroup: "",
   });
@@ -35,7 +34,7 @@ const AddVehicle = () => {
         engineNumber: "",
         manufacturedBy: "",
         vehicleType: "",
-        vehicleColour: "",
+        vehicleColour: "#ffffff", // Reset to default color
         registrationExpiryDate: "",
         vehicleGroup: "",
       });
@@ -135,11 +134,15 @@ const AddVehicle = () => {
           <div className="form-group">
             <label>Vehicle Colour</label>
             <input
-              type="text"
+              type="color"
               name="vehicleColour"
               value={formData.vehicleColour}
               required
               onChange={handleChange}
+            />
+            <div
+              className="color-preview"
+              style={{ backgroundColor: formData.vehicleColour }}
             />
           </div>
           <div className="form-group">

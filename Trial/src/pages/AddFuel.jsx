@@ -48,7 +48,7 @@ const FuelForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/fuels", formData);
+      await axios.post("http://localhost:5000/api/addFuel", formData);
       alert("Fuel entry added!");
     } catch (err) {
       console.error("Error submitting fuel:", err);

@@ -2,60 +2,86 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
-const SidebarItem = ({ label, children }) => {
+const NavItem = ({ label, children }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="sidebar-item">
-      <div className="sidebar-main" onClick={() => setOpen(!open)}>
+    <div className={`nav-item ${open ? 'active' : ''}`}>
+      <div 
+        className="nav-main" 
+        onClick={() => setOpen(!open)}
+        onKeyDown={(e) => e.key === 'Enter' && setOpen(!open)}
+        tabIndex={0}
+        role="button"
+        aria-expanded={open}
+        aria-haspopup="true"
+      >
         {label}
         <span className="arrow">{open ? "▲" : "▼"}</span>
       </div>
-      {open && <div className="sidebar-sub">{children}</div>}
+      <div className="sub-menu" aria-hidden={!open}>
+        <ul>
+          {React.Children.map(children, child => {
+            if (React.isValidElement(child)) {
+              return (
+                <li className="sub-menu-item" onClick={() => setOpen(false)}>
+                  {child}
+                </li>
+              );
+            }
+            return child;
+          })}
+        </ul>
+      </div>
     </div>
   );
 };
 
 const Navbar = () => {
   return (
-    <nav className="sidebar">
-      <h2>FleetManager</h2>
+    <div className="navbar-container">
+      <h2 className="navbar-brand">FleetManager</h2>
+      <nav className="navbar" aria-label="Main navigation">
+        <NavItem label="Dashboard">
+          <Link to="/">Home</Link>
+        </NavItem>
 
-      <SidebarItem label="Dashboard">
-        <Link to="/">Home</Link>
-      </SidebarItem>
+        <NavItem label="Vehicles">
+          <Link to="/vehicles">Vehicle List</Link>
+          <Link to="/vehicles/add">Add Vehicle</Link>
+          <Link to="/vehicles/groups">Vehicle Groups</Link>
+        </NavItem>
 
-      <SidebarItem label="Vehicles">
-        <Link to="/vehicles">Vehicle List</Link>
-        <Link to="/vehicles/add">Add Vehicle</Link>
-        <Link to="/vehicles/groups">Vehicle Groups</Link>
-      </SidebarItem>
+        <NavItem label="Drivers">
+          <Link to="/drivers">Driver List</Link>
+          <Link to="/drivers/add">Add Driver</Link>
+        </NavItem>
 
-      <SidebarItem label="Drivers">
-        <Link to="/drivers">Driver List</Link>
-        <Link to="/drivers/add">Add Driver</Link>
-      </SidebarItem>
+        <NavItem label="Bookings">
+          <Link to="/bookings">All Bookings</Link>
+          <Link to="/bookings/new">Create Booking</Link>
+        </NavItem>
 
-      <SidebarItem label="Bookings">
-        <Link to="/bookings">All Bookings</Link>
-        <Link to="/bookings/new">Create Booking</Link>
-      </SidebarItem>
+        <NavItem label="Customers">
+          <Link to="/customers">Customer List</Link>
+          <Link to="/customers/add">Add Customer</Link>
+        </NavItem>
 
-      <SidebarItem label="Customers">
-        <Link to="/customers">Customer List</Link>
-        <Link to="/customers/add">Add Customer</Link>
-      </SidebarItem>
+        <NavItem label="Fuel">
+          <Link to="/fuel">Fuel Logs</Link>
+          <Link to="/fuel/add">Add Fuel Entry</Link>
+        </NavItem>
 
-      <SidebarItem label="Fuel">
-        <Link to="/fuel">Fuel Logs</Link>
-        <Link to="/fuel/add">Add Fuel Entry</Link>
-      </SidebarItem>
-
-      <SidebarItem label="Reminders">
-        <Link to="/reminders">View Reminders</Link>
-        <Link to="/reminders/add">Add Reminder</Link>
-      </SidebarItem>
-    </nav>
+        <NavItem label="Reminders">
+          <Link to="/reminders">View Reminders</Link>
+          <Link to="/reminders/add">Add Reminder</Link>
+        </NavItem>
+        <NavItem label="Tracking">
+          <Link to="/tracking">View On Map</Link>
+          
+        </NavItem>
+      </nav>
+    </div>
   );
 };
 

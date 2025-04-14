@@ -1,98 +1,225 @@
-/* Customer.css */
-
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  margin: 0;
-  padding: 0;
+/* Base Container */
+.customer-card-container {
+  padding: 2rem;
+  background-color: #f5f7fa;
+  min-height: 100vh;
 }
 
-h2 {
-  text-align: center;
-  margin: 20px 0;
-  color: #333;
+/* Header */
+.form-header {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--light-gray);
+  padding-bottom: 1rem;
 }
 
-table {
-  width: 90%;
-  margin: 0 auto 40px;
-  border-collapse: collapse;
-  background-color: #fff;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+/* Card Grid */
+.customer-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Individual Card */
+.customer-card {
+  background: white;
   border-radius: 10px;
-  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  animation: fadeIn 0.5s ease-out;
 }
 
-th, td {
-  padding: 12px 15px;
-  text-align: left;
+.customer-card:hover {
+  transform: translateY(-5px);
 }
 
-th {
-  background-color: #f0f0f0;
-  color: #444;
-  border-bottom: 1px solid #ddd;
+/* Card Info */
+.customer-card p {
+  margin-bottom: 0.5rem;
+  color: var(--dark);
+  font-size: 0.95rem;
 }
 
-td {
-  border-bottom: 1px solid #eee;
+.customer-card strong {
+  color: var(--primary);
 }
 
-tr:hover {
-  background-color: #f6f6f6;
+/* Actions */
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.modal {
+.card-actions svg {
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--primary);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.card-actions svg:hover {
+  transform: scale(1.2);
+  color: var(--primary-dark);
+}
+
+/* Modal Styles */
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: white;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 999;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
 }
 
-.modal-content {
-  background: #fff;
-  padding: 30px;
-  width: 400px;
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.edit-modal {
+  background: white;
+  color:black;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  opacity: 0;
 }
 
-.modal-content form {
+.modal-overlay.active .edit-modal {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Modal Header */
+.modal-header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
 }
 
-.modal-content label {
-  margin-top: 10px;
-  font-weight: bold;
-  color: #333;
+.modal-header h2 {
+  color: var(--dark);
+  font-size: 1.5rem;
 }
 
-.modal-content input {
-  padding: 8px;
-  margin-top: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: white;
-  color: black;
+.close-modal {
+  background: none;
+  border: none;
+  color: var(--gray);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.modal-content button {
-  margin-top: 15px;
-  padding: 10px;
-  background: #2c89ff;
+.close-modal:hover {
+  color: var(--danger);
+  transform: rotate(90deg);
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--dark);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--light-gray);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+/* Modal Footer */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--light-gray);
+}
+
+.cancel-btn, .update-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn {
+  background-color: var(--light-gray);
+  color: var(--dark);
+  border: none;
+}
+
+.cancel-btn:hover {
+  background-color: #dee2e6;
+}
+
+.update-btn {
+  background-color: var(--primary);
   color: white;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
-.modal-content button[type="button"] {
-  background: #aaa;
+.update-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .edit-modal {
+    width: 95%;
+  }
+
+  .customer-card-grid {
+    grid-template-columns: 1fr;
+  }
 }

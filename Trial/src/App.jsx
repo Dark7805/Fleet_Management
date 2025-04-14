@@ -16,6 +16,7 @@ import AddCustomer from "./pages/AddCustomer";
 import AddFuel from "./pages/AddFuel";
 import Remainder from "./pages/Remainder";
 import AddRemainder from "./pages/AddRemainder";
+import Tracking from "./pages/Tracking";
 
 import "./App.css";
 
@@ -52,6 +53,7 @@ function App() {
           {/* Reminders */}
           <Route path="/remainders" element={<Remainder />} />
           <Route path="/remainders/add" element={<AddRemainder />} />
+          <Route path="/tracking" element={<Tracking />} />
         </Routes>
       </div>
     </div>

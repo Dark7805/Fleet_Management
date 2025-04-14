@@ -1,0 +1,111 @@
+/* AddDriver.css */
+
+/* Form Container */
+.add-driver-container {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    max-width: 600px;
+    margin: 2rem auto;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  /* Form Header */
+  .form-header {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .form-header h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Form Groups */
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  
+  /* Form Inputs */
+  .form-input, .form-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    background-color: #fff;
+  }
+  
+  .form-input:focus, .form-select:focus {
+    outline: none;
+    border-color: #4361ee;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+  }
+  
+  /* Submit Button */
+  .submit-btn {
+    background-color: #4361ee;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .submit-btn:hover {
+    background-color: #3a56d4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+  }
+  
+  .submit-btn:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* Loading State */
+  .form-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+  }
+  
+  .form-loading .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(67, 97, 238, 0.1);
+    border-radius: 50%;
+    border-top-color: #4361ee;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .add-driver-container {
+      padding: 1.5rem;
+    }
+  }
+  

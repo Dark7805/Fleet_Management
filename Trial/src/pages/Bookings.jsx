@@ -1,153 +1,245 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { FaEye, FaEdit, FaTimes, FaCheck } from "react-icons/fa";
+import "./Bookings.css";
 
 const Bookings = () => {
-  const [formData, setFormData] = useState({
-    customerName: "",
-    vehicle: "",
-    driver: "",
-    pickupDate: "",
-    dropDate: "",
-    status: "Scheduled",
-  });
+  const [bookings, setBookings] = useState([]);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [editData, setEditData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
 
-  const [bookingList, setBookingList] = useState([
-    {
-      customerName: "Rahul Mehra",
-      vehicle: "MH12AB1234",
-      driver: "Vikram Singh",
-      pickupDate: "2025-04-10",
-      dropDate: "2025-04-12",
-      status: "Ongoing",
-    },
-    {
-      customerName: "Neha Patil",
-      vehicle: "MH14CD5678",
-      driver: "Arjun Reddy",
-      pickupDate: "2025-04-08",
-      dropDate: "2025-04-09",
-      status: "Completed",
-    },
-  ]);
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/bookings");
+        setBookings(res.data);
+      } catch (err) {
+        console.error("Error fetching bookings:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBookings();
+  }, []);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleEditChange = (e) => {
+    setEditData({ ...editData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setBookingList([...bookingList, formData]);
-    setFormData({
-      customerName: "",
-      vehicle: "",
-      driver: "",
-      pickupDate: "",
-      dropDate: "",
-      status: "Scheduled",
-    });
-    alert("Booking created!");
+  const handleUpdate = async () => {
+    setIsUpdating(true);
+    try {
+      await axios.put(`http://localhost:5000/api/bookings/${editData._id}`, editData);
+      setBookings(prev => prev.map(b => b._id === editData._id ? { ...b, ...editData } : b));
+      setTimeout(() => {
+        setSelectedBooking(null);
+      }, 300); // Delay to allow animation
+    } catch (err) {
+      console.error("Update failed", err);
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   return (
-    <div>
-      <h1>Manage Bookings</h1>
+    <div className="bookings-dashboard">
+      <header className="bookings-header">
+        <h1>Bookings Management</h1>
+        <div className="header-actions">
+          <button className="refresh-btn" onClick={() => window.location.reload()}>
+            Refresh
+          </button>
+        </div>
+      </header>
 
-      {/* Booking Form */}
-      <form className="form" onSubmit={handleSubmit}>
-        <label>
-          Customer Name:
-          <input
-            type="text"
-            name="customerName"
-            value={formData.customerName}
-            onChange={handleChange}
-            required
-          />
-        </label>
+      {loading ? (
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading bookings...</p>
+        </div>
+      ) : (
+        <div className="bookings-content">
+          <div className="bookings-table-container">
+            <table className="bookings-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Driver</th>
+                  <th>Trip Type</th>
+                  <th>Route</th>
+                  <th>Distance</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bookings.map((b) => (
+                  <tr key={b._id} className="booking-row">
+                    <td>
+                      <div className="customer-cell">
+                        <span className="customer-name">{b.customer?.name}</span>
+                      </div>
+                    </td>
+                    <td>{b.driver?.driverName}</td>
+                    <td>
+                      <span className={`trip-type ${b.tripType.toLowerCase().replace(' ', '-')}`}>
+                        {b.tripType}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="route-info">
+                        <span className="location">{b.startLocation}</span>
+                        <span className="route-arrow">→</span>
+                        <span className="location">{b.endLocation}</span>
+                      </div>
+                    </td>
+                    <td>{b.totalKm} km</td>
+                    <td className="amount-cell">₹{b.totalAmount}</td>
+                    <td>
+                      <span className={`status-badge ${b.tripStatus.toLowerCase()}`}>
+                        {b.tripStatus}
+                      </span>
+                    </td>
+                    <td>
+                      <button 
+                        className="view-btn"
+                        onClick={() => {
+                          setSelectedBooking(b);
+                          setEditData(b);
+                        }}
+                      >
+                        <FaEye />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
-        <label>
-          Vehicle Number:
-          <input
-            type="text"
-            name="vehicle"
-            value={formData.vehicle}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        <label>
-          Driver Name:
-          <input
-            type="text"
-            name="driver"
-            value={formData.driver}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        <label>
-          Pickup Date:
-          <input
-            type="date"
-            name="pickupDate"
-            value={formData.pickupDate}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        <label>
-          Drop Date:
-          <input
-            type="date"
-            name="dropDate"
-            value={formData.dropDate}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        <label>
-          Status:
-          <select name="status" value={formData.status} onChange={handleChange}>
-            <option value="Scheduled">Scheduled</option>
-            <option value="Ongoing">Ongoing</option>
-            <option value="Completed">Completed</option>
-          </select>
-        </label>
-
-        <button type="submit">Create Booking</button>
-      </form>
-
-      {/* Booking List Table */}
-      <div className="table-container">
-        <h2>Booking List</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Customer</th>
-              <th>Vehicle</th>
-              <th>Driver</th>
-              <th>Pickup</th>
-              <th>Drop</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookingList.map((booking, index) => (
-              <tr key={index}>
-                <td>{booking.customerName}</td>
-                <td>{booking.vehicle}</td>
-                <td>{booking.driver}</td>
-                <td>{booking.pickupDate}</td>
-                <td>{booking.dropDate}</td>
-                <td>{booking.status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {/* Edit Modal */}
+      {selectedBooking && (
+        <div className={`modal-overlay ${selectedBooking ? 'active' : ''}`}>
+          <div className="edit-modal">
+            <div className="modal-header">
+              <h2>Edit Booking Details</h2>
+              <button 
+                className="close-modal"
+                onClick={() => setSelectedBooking(null)}
+                disabled={isUpdating}
+              >
+                <FaTimes />
+              </button>
+            </div>
+            
+            <div className="modal-body">
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Trip Type</label>
+                  <select 
+                    name="tripType" 
+                    value={editData.tripType} 
+                    onChange={handleEditChange}
+                    className="form-select"
+                  >
+                    <option value="Single Trip">Single Trip</option>
+                    <option value="Round Trip">Round Trip</option>
+                  </select>
+                </div>
+                
+                <div className="form-group">
+                  <label>Start Location</label>
+                  <input
+                    type="text"
+                    name="startLocation"
+                    value={editData.startLocation}
+                    onChange={handleEditChange}
+                    className="form-input"
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label>End Location</label>
+                  <input
+                    type="text"
+                    name="endLocation"
+                    value={editData.endLocation}
+                    onChange={handleEditChange}
+                    className="form-input"
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label>Distance (KM)</label>
+                  <input
+                    type="number"
+                    name="totalKm"
+                    value={editData.totalKm}
+                    onChange={handleEditChange}
+                    className="form-input"
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label>Total Amount (₹)</label>
+                  <input
+                    type="number"
+                    name="totalAmount"
+                    value={editData.totalAmount}
+                    onChange={handleEditChange}
+                    className="form-input"
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label>Trip Status</label>
+                  <select 
+                    name="tripStatus" 
+                    value={editData.tripStatus} 
+                    onChange={handleEditChange}
+                    className="form-select"
+                  >
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div className="modal-footer">
+              <button 
+                className="cancel-btn"
+                onClick={() => setSelectedBooking(null)}
+                disabled={isUpdating}
+              >
+                Cancel
+              </button>
+              <button 
+                className="update-btn"
+                onClick={handleUpdate}
+                disabled={isUpdating}
+              >
+                {isUpdating ? (
+                  <>
+                    <span className="spinner"></span>
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <FaCheck /> Update
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,17 +1,14 @@
-import './Customer.css'
-
+import './Customer.css';
 import React, { useEffect, useState } from "react";
-import { FaEye, FaTrash } from "react-icons/fa"; // ✅ CORRECT
+import { FaEye, FaTrash } from "react-icons/fa";
 
-
-const CustomerList = () => {
+const Customers = () => {
   const [customers, setCustomers] = useState([]);
   const [editingCustomer, setEditingCustomer] = useState(null);
   const [editForm, setEditForm] = useState({ name: "", mobile: "", email: "", address: "" });
 
   const fetchCustomers = async () => {
-    const res = await fetch("http://localhost:5000/api/getcustomers")
-    ;
+    const res = await fetch("http://localhost:5000/api/getcustomers");
     const data = await res.json();
     setCustomers(data);
   };
@@ -46,56 +43,76 @@ const CustomerList = () => {
   };
 
   return (
-    <div>
-      <h2>Customer List</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Mobile</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {customers.map((cust) => (
-            <tr key={cust._id}>
-              <td>{cust.name}</td>
-              <td>{cust.mobile}</td>
-              <td>{cust.email}</td>
-              <td>{cust.address}</td>
-              <td>
-                <FaEye style={{ cursor: "pointer", marginRight: "10px" }} onClick={() => handleEditClick(cust)} />
-                <FaTrash style={{ cursor: "pointer" }} onClick={() => deleteCustomer(cust._id)} />
-              </td>
+    <div className="bookings-dashboard">
+      <div className="bookings-header">
+        <h1>Customer List</h1>
+      </div>
+
+      <div className="bookings-table-container">
+        <table className="bookings-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>Email</th>
+              <th>Address</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {customers.map((cust) => (
+              <tr key={cust._id} className="booking-row">
+                <td>{cust.name}</td>
+                <td>{cust.mobile}</td>
+                <td>{cust.email}</td>
+                <td>{cust.address}</td>
+                <td>
+                  <button className="view-btn" onClick={() => handleEditClick(cust)}>
+                    <FaEye />
+                  </button>
+                  <button className="view-btn" onClick={() => deleteCustomer(cust._id)}>
+                    <FaTrash />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      {/* Edit Modal */}
       {editingCustomer && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Edit Customer</h3>
+        <div className="modal-overlay active">
+          <div className="edit-modal">
+            <div className="modal-header">
+              <h2>Edit Customer</h2>
+              <button className="close-modal" onClick={() => setEditingCustomer(null)}>×</button>
+            </div>
             <form onSubmit={handleUpdate}>
-  <label htmlFor="name">Name:</label>
-  <input type="text" name="name" id="name" value={editForm.name} onChange={handleEditChange} required />
-
-  <label htmlFor="mobile">Mobile:</label>
-  <input type="text" name="mobile" id="mobile" value={editForm.mobile} onChange={handleEditChange} required />
-
-  <label htmlFor="email">Email:</label>
-  <input type="email" name="email" id="email" value={editForm.email} onChange={handleEditChange} required />
-
-  <label htmlFor="address">Address:</label>
-  <input type="text" name="address" id="address" value={editForm.address} onChange={handleEditChange} required />
-
-  <button type="submit">Update</button>
-  <button type="button" onClick={() => setEditingCustomer(null)}>Cancel</button>
-</form>
-
+              <div className="modal-body">
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" value={editForm.name} onChange={handleEditChange} className="form-input" />
+                  </div>
+                  <div className="form-group">
+                    <label>Mobile</label>
+                    <input type="text" name="mobile" value={editForm.mobile} onChange={handleEditChange} className="form-input" />
+                  </div>
+                  <div className="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" value={editForm.email} onChange={handleEditChange} className="form-input" />
+                  </div>
+                  <div className="form-group">
+                    <label>Address</label>
+                    <input type="text" name="address" value={editForm.address} onChange={handleEditChange} className="form-input" />
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="cancel-btn" onClick={() => setEditingCustomer(null)}>Cancel</button>
+                <button type="submit" className="update-btn">Update</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -103,4 +120,4 @@ const CustomerList = () => {
   );
 };
 
-export default CustomerList;
+export default Customers;

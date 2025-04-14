@@ -1,33 +1,88 @@
+/* Container */
 .fuel-list {
-    padding: 20px;
-    background-color: #f7f7f7;
-    border-radius: 10px;
-    max-width: 90%;
-    margin: auto;
+  padding: 2rem;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+/* Header */
+.fuel-list h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--light-gray);
+  padding-bottom: 0.5rem;
+}
+
+/* Table */
+.fuel-list table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Table Head */
+.fuel-list th {
+  background-color: var(--primary);
+  color: white;
+  font-weight: 600;
+  text-align: left;
+  padding: 1rem;
+  font-size: 0.95rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Table Body */
+.fuel-list td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+  color: var(--dark);
+}
+
+.fuel-list tr:nth-child(even) {
+  background-color: #f9fbfd;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .fuel-list table, .fuel-list thead, .fuel-list tbody, .fuel-list th, .fuel-list td, .fuel-list tr {
+    display: block;
   }
-  
-  .fuel-list h2 {
-    text-align: center;
-    color: #333;
-  }
-  
-  .fuel-list table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .fuel-list th,
-  .fuel-list td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: center;
-  }
-  
+
   .fuel-list th {
-    background-color: #f0f0f0;
-    color: #333;
+    display: none;
   }
-  
+
+  .fuel-list td {
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .fuel-list td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 600;
+    color: var(--gray);
+    text-align: left;
+    white-space: nowrap;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
