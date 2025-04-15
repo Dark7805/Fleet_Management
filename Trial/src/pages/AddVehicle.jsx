@@ -24,7 +24,7 @@ const AddVehicle = () => {
     e.preventDefault();
     console.log("Adding Vehicle:", formData);
     try {
-      await axios.post("http://localhost:5000/api/vehicles", formData);
+      await axios.post("http://localhost:5000/api/addVehicles", formData);
       alert("Vehicle added");
       setFormData({
         registrationNumber: "",

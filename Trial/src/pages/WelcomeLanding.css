@@ -1,0 +1,153 @@
+/* WelcomeLanding.css */
+/* WelcomeLanding.css */
+.welcome-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000; /* Very high z-index */
+  overflow-y: auto; /* Allow scrolling */
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+/* Remove any margin/padding that might show the navbar */
+.welcome-header {
+  padding-top: 1rem; /* Reduced top padding since we're at top */
+  
+}
+.welcome-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    z-index: 1000;
+    color: #2c3e50; /* Ensure dark color */
+    font-weight: 700; /* Bold text */
+    opacity: 1; /* Full opacity */
+    text-shadow: none; /* No text shadow */
+    align-items: center;
+    text-align: center;
+  }
+  
+  .welcome-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    z-index: 1000;
+    color: #2c3e50; /* Ensure dark color */
+    font-weight: 700; /* Bold text */
+    opacity: 1; /* Full opacity */
+    text-shadow: none; /* No text shadow */
+    align-items: center;
+    text-align: center;
+
+  }
+  
+  .welcome-main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .features-section {
+    margin-bottom: 3rem;
+  }
+  
+  .features-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #2c3e50;
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+  
+  .feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    text-align: center;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .feature-icon {
+    font-size: 2.5rem;
+    color: #3498db;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+  }
+  
+  .feature-card p {
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  .cta-section {
+    text-align: center;
+    padding: 3rem 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+  }
+  
+  .cta-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+  }
+  
+  .cta-section p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: #666;
+  }
+  
+  .login-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 2rem;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-button:hover {
+    background-color: #2980b9;
+  }
+  
+  .welcome-footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #2c3e50;
+    color: white;
+    margin-top: auto;
+  }
+  
+  @media (max-width: 768px) {
+    .welcome-header h1 {
+      font-size: 2rem;
+    }
+    
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }

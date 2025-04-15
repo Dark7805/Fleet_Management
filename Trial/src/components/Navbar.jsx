@@ -38,12 +38,20 @@ const NavItem = ({ label, children }) => {
 };
 
 const Navbar = () => {
+  // Handle logout action
+  const handleLogout = () => {
+    // Clear any user session or token here, example:
+    localStorage.removeItem("userToken");
+    // Redirect to login or home page
+    window.location.href = "/login";
+  };
+
   return (
     <div className="navbar-container">
       <h2 className="navbar-brand">FleetManager</h2>
       <nav className="navbar" aria-label="Main navigation">
         <NavItem label="Dashboard">
-          <Link to="/">Home</Link>
+          <Link to="/dashboard">Home</Link>
         </NavItem>
 
         <NavItem label="Vehicles">
@@ -76,9 +84,14 @@ const Navbar = () => {
           <Link to="/reminders">View Reminders</Link>
           <Link to="/reminders/add">Add Reminder</Link>
         </NavItem>
+
         <NavItem label="Tracking">
           <Link to="/tracking">View On Map</Link>
-          
+        </NavItem>
+
+        {/* Add the logout button at the end */}
+        <NavItem label="Logout">
+          <button className="logout-btn" onClick={handleLogout}>Logout</button>
         </NavItem>
       </nav>
     </div>

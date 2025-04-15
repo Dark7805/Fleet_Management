@@ -20,7 +20,7 @@ import Login from "./login/Login";
 import Signup from './login/Signup';
 import { AuthProvider, useAuth } from "./components/AuthContext";
 import "./App.css";
-
+import WelcomeLandingPage from "./pages/WelcomeLandingPage";
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
@@ -39,13 +39,14 @@ function AppContent() {
   console.log('Is Authenticated in AppContent:', isAuthenticated);  // Debug log
 
   // Hide Navbar on login or signup pages
-  const hideNavbar = location.pathname === "/login" || location.pathname === "/signup";
+  const hideNavbar = location.pathname === "/login" || location.pathname === "/signup" || location.pathname==="/";
 
   return (
     <div className="main-container">
       {!hideNavbar && <Navbar />}
       <div className="content">
         <Routes>
+        <Route path="/" element={<WelcomeLandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 

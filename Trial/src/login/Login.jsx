@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaUser, FaLock, FaEnvelope, FaSignInAlt } from 'react-icons/fa';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { useAuth } from '../components/AuthContext'; // Assuming you have this AuthContext to manage authentication
+import { useAuth } from '../components/AuthContext';
 import './Auth.css';
 
 const Login = () => {
@@ -11,16 +11,22 @@ const Login = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // For password visibility toggle
+  const [errors, setErrors] = useState({
+    email: '',
+    password: '',
+    general: ''
+  });
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth(); // Assuming this context provides the login method for setting auth state
-  const from = location.state?.from?.pathname || '/dashboard'; // Default redirect to dashboard if no previous page
+  const { login } = useAuth();
+  const from = location.state?.from?.pathname || '/dashboard';
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear error when user types
+    setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const handlePasswordToggle = () => {
@@ -30,22 +36,59 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setErrors({ email: '', password: '', general: '' }); // Reset errors
+    
     try {
       const response = await axios.post('http://localhost:5000/api/login', formData);
       const { token } = response.data;
-  
+
       if (token) {
-        localStorage.setItem('token', token); // Store token in localStorage
-        login(); // Update context to reflect logged-in state
-        navigate(from, { replace: true }); // Redirect to the intended route (or default to dashboard)
+        localStorage.setItem('token', token);
+        login(); // This should set isAuthenticated to true
+        
+        // Use the redirect path from state or default to dashboard
+        const redirectTo = location.state?.from || '/dashboard';
+        navigate(redirectTo, { replace: true });
       }
     } catch (error) {
       console.error('Login error:', error);
-      alert('Invalid credentials');
+      
+      if (error.response) {
+        // Server responded with error status (4xx, 5xx)
+        if (error.response.status === 401) {
+          setErrors({
+            password: 'Invalid email or password',
+            email: 'Invalid email or password'
+          });
+        } else if (error.response.status === 400) {
+          // Handle validation errors from server
+          const serverErrors = error.response.data.errors || {};
+          setErrors(prev => ({
+            ...prev,
+            ...serverErrors
+          }));
+        } else {
+          setErrors(prev => ({
+            ...prev,
+            general: 'An error occurred. Please try again.'
+          }));
+        }
+      } else if (error.request) {
+        // Request was made but no response
+        setErrors(prev => ({
+          ...prev,
+          general: 'Network error. Please check your connection.'
+        }));
+      } else {
+        // Other errors
+        setErrors(prev => ({
+          ...prev,
+          general: 'Login failed. Please try again.'
+        }));
+      }
     } finally {
       setLoading(false);
     }
-  
   };
 
   return (
@@ -55,6 +98,12 @@ const Login = () => {
           <h2><FaSignInAlt /> Welcome Back</h2>
           <p>Please enter your credentials to login</p>
         </div>
+
+        {errors.general && (
+          <div className="error-message general-error">
+            {errors.general}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
@@ -66,7 +115,13 @@ const Login = () => {
               onChange={handleChange}
               placeholder="Enter your email"
               required
+              className={errors.email ? 'error' : ''}
             />
+            {errors.email && (
+              <div className="error-message field-error">
+                {errors.email}
+              </div>
+            )}
           </div>
 
           <div className="form-group">
@@ -79,15 +134,22 @@ const Login = () => {
                 onChange={handleChange}
                 placeholder="Enter your password"
                 required
+                className={errors.password ? 'error' : ''}
               />
-              <button type="button" onClick={handlePasswordToggle} className="password-toggle">
+              <button 
+                type="button" 
+                onClick={handlePasswordToggle} 
+                className="password-toggle"
+              >
                 {showPassword ? 'Hide' : 'Show'}
               </button>
             </div>
+            {errors.password && (
+              <div className="error-message field-error">
+                {errors.password}
+              </div>
+            )}
           </div>
-
-          {/* Display error message */}
-          {errorMessage && <div className="error-message">{errorMessage}</div>}
 
           <div className="auth-actions">
             <button type="submit" disabled={loading}>
@@ -97,6 +159,7 @@ const Login = () => {
 
           <div className="auth-footer">
             <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
+            <Link to="/">Back to Welcome</Link> <br />
             <Link to="/forgot-password">Forgot password?</Link>
           </div>
         </form>

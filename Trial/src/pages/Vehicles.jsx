@@ -11,6 +11,9 @@ const Vehicles = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({});
 
+  // Debugging state
+  const [debugInfo, setDebugInfo] = useState('');
+
   useEffect(() => {
     fetchVehicles();
   }, []);
@@ -40,6 +43,9 @@ const Vehicles = () => {
   };
 
   const openUpdateForm = (vehicle) => {
+    console.log('Opening update form for vehicle:', vehicle); // Debug log
+    setDebugInfo(`Attempting to open modal for vehicle: ${vehicle._id}`);
+    
     setSelectedVehicle(vehicle);
     setFormData({
       vehicleName: vehicle.vehicleName || '',
@@ -53,12 +59,15 @@ const Vehicles = () => {
       registrationExpiryDate: vehicle.registrationExpiryDate?.substring(0, 10) || '',
       vehicleGroup: vehicle.vehicleGroup || ''
     });
+    
     setIsModalOpen(true);
+    setDebugInfo(prev => prev + ' - Modal state set to true');
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedVehicle(null);
+    setDebugInfo('Modal closed');
   };
 
   const handleInputChange = (e) => {
@@ -83,7 +92,8 @@ const Vehicles = () => {
   return (
     <div className="vehicle-list-container">
       <h2 className="page-title">Vehicle List</h2>
-
+      
+  
       {loading ? (
         <div className="loading-animation">
           <div className="spinner"></div>
@@ -109,10 +119,7 @@ const Vehicles = () => {
             </thead>
             <tbody>
               {vehicles.map(vehicle => (
-                <tr 
-                  key={vehicle._id}
-                  className={deletingId === vehicle._id ? 'deleting-row' : ''}
-                >
+                <tr key={vehicle._id}>
                   <td>{vehicle.vehicleName}</td>
                   <td>{vehicle.registrationNumber}</td>
                   <td>{vehicle.modelNumber}</td>
@@ -133,22 +140,21 @@ const Vehicles = () => {
                     <div className="action-buttons">
                       <button 
                         className="view-btn"
-                        onClick={() => openUpdateForm(vehicle)}
+                        onClick={() => {
+                          console.log('Eye button clicked'); // Debug log
+                          openUpdateForm(vehicle);
+                        }}
                         title="View/Edit Details"
                       >
                         <FaEye />
                       </button>
                       <button 
-                        className={`delete-btn ${deletingId === vehicle._id ? 'deleting' : ''}`}
+                        className="delete-btn"
                         onClick={() => deleteVehicle(vehicle._id)}
                         disabled={deletingId === vehicle._id}
                         title="Delete Vehicle"
                       >
-                        {deletingId === vehicle._id ? (
-                          <span className="deleting-text">...</span>
-                        ) : (
-                          <FaTrash />
-                        )}
+                        {deletingId === vehicle._id ? 'Deleting...' : <FaTrash />}
                       </button>
                     </div>
                   </td>
@@ -161,8 +167,8 @@ const Vehicles = () => {
 
       {/* Update Form Modal */}
       {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className="modal-overlay active" onClick={closeModal}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3>Update Vehicle Details</h3>
               <button className="close-btn" onClick={closeModal}>
@@ -170,30 +176,26 @@ const Vehicles = () => {
               </button>
             </div>
             <form onSubmit={handleSubmit}>
-              {[
-                { label: 'Vehicle Name', name: 'vehicleName', type: 'text' },
-                { label: 'Registration Number', name: 'registrationNumber', type: 'text' },
-                { label: 'Model Number', name: 'modelNumber', type: 'text' },
-                { label: 'Chassis Number', name: 'chassisNumber', type: 'text' },
-                { label: 'Engine Number', name: 'engineNumber', type: 'text' },
-                { label: 'Manufacturer', name: 'manufacturedBy', type: 'text' },
-                { label: 'Vehicle Type', name: 'vehicleType', type: 'text' },
-                { label: 'Color', name: 'vehicleColour', type: 'text' },
-                { label: 'Registration Expiry Date', name: 'registrationExpiryDate', type: 'date' },
-                { label: 'Vehicle Group', name: 'vehicleGroup', type: 'text' },
-              ].map((field) => (
-                <div className="form-group" key={field.name}>
-                  <label>{field.label}</label>
-                  <input
-                    type={field.type}
-                    name={field.name}
-                    value={formData[field.name]}
-                    onChange={handleInputChange}
-                    required={field.name === 'vehicleName' || field.name === 'registrationNumber'}
-                  />
-                </div>
-              ))}
-
+              <div className="form-group">
+                <label>Vehicle Name</label>
+                <input
+                  type="text"
+                  name="vehicleName"
+                  value={formData.vehicleName}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Registration Number</label>
+                <input
+                  type="text"
+                  name="registrationNumber"
+                  value={formData.registrationNumber}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
               <div className="modal-footer">
                 <button type="button" className="cancel-btn" onClick={closeModal}>
                   Cancel

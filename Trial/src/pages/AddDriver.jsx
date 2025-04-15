@@ -130,8 +130,8 @@ const AddDriver = () => {
               required
             >
               <option value="">Select Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="Available">Available</option>
+              <option value="Not Available">Not Available</option>
               <option value="on-leave">On Leave</option>
             </select>
           </div>
