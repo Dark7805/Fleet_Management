@@ -26,7 +26,7 @@ const AddDriver = () => {
     setIsSubmitting(true);
     
     try {
-      await axios.post("http://localhost:5000/api/drivers", formData);
+      await axios.post("http://localhost:5000/api/newDriver", formData);
       alert("Driver added successfully!");
       // Reset form
       setFormData({

@@ -18,6 +18,8 @@ const CreateTripForm = () => {
   const [customers, setCustomers] = useState([]);
   const [vehicles, setVehicles] = useState([]);
   const [drivers, setDrivers] = useState([]);
+  const [availableDrivers, setAvailableDrivers] = useState([]);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const startRef = useRef(null);
   const endRef = useRef(null);
@@ -52,6 +54,16 @@ const CreateTripForm = () => {
       });
     }
   };
+  //fetchaavilable driver
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/availableDrivers")
+      .then(res => {
+        setAvailableDrivers(res.data);
+        console.log("Available Drivers: ", res.data); // ✅ this is helpful
+      })
+      .catch(err => console.error("Error fetching available drivers:", err));
+  }, []);
+  
 
   // Calculate distance between start and end locations
   useEffect(() => {
@@ -132,10 +144,24 @@ const CreateTripForm = () => {
 
             <div className="form-group">
               <label><FaUser /> Driver</label>
-              <select name="driverId" value={formData.driverId} onChange={handleChange} className="form-select" required>
-                <option value="">Select Driver</option>
-                {drivers.map((d) => (<option key={d._id} value={d._id}>{d.driverName}</option>))}
-              </select>
+              <select
+  value={formData.driverId}
+  onChange={(e) => setFormData({ ...formData, driverId: e.target.value })}
+>
+  {availableDrivers.length > 0 ? (
+    <>
+      <option value="">Select Driver</option>
+      <option value="assign_later">Assign Later</option> 
+      {availableDrivers.map(driver => (
+        <option key={driver._id} value={driver._id}>
+          {driver.driverName}
+        </option>
+      ))}
+    </>
+  ) : (
+    <option value="">No Drivers Available</option>
+  )}
+</select>
             </div>
 
             <div className="form-group">
