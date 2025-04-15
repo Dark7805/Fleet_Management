@@ -1,6 +1,5 @@
 import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import AddVehicle from "./pages/AddVehicle";
@@ -18,14 +17,14 @@ import Remainder from "./pages/Remainder";
 import AddRemainder from "./pages/AddRemainder";
 import Tracking from "./pages/Tracking";
 import Login from "./login/Login";
-import Signup  from './login/Signup'
+import Signup from './login/Signup';
 import { AuthProvider, useAuth } from "./components/AuthContext";
-
 import "./App.css";
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
+  console.log('Is Authenticated:', isAuthenticated);  // Debug log
 
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
@@ -37,10 +36,11 @@ function ProtectedRoute({ children }) {
 function AppContent() {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
+  console.log('Is Authenticated in AppContent:', isAuthenticated);  // Debug log
 
-  // Hide Navbar on login page
-  const hideNavbar = location.pathname === "/login" || location.pathname==="/signup";
- 
+  // Hide Navbar on login or signup pages
+  const hideNavbar = location.pathname === "/login" || location.pathname === "/signup";
+
   return (
     <div className="main-container">
       {!hideNavbar && <Navbar />}

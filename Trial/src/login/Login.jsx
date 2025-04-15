@@ -11,6 +11,8 @@ const Login = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // For password visibility toggle
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth(); // Assuming this context provides the login method for setting auth state
@@ -21,33 +23,29 @@ const Login = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handlePasswordToggle = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Make API call to your login endpoint (replace with your actual API URL)
       const response = await axios.post('http://localhost:5000/api/login', formData);
-
-      // Assuming the API returns a token after successful login
       const { token } = response.data;
-
+  
       if (token) {
-        // Store the token in localStorage or sessionStorage
-        localStorage.setItem('token', token);
-
-        // Optionally, update your auth context or global state here
-        login(); // Assuming login sets isAuthenticated to true in context
-
-        navigate(from, { replace: true }); // Redirect user to previous page or default
-        console.log('Login successful');
+        localStorage.setItem('token', token); // Store token in localStorage
+        login(); // Update context to reflect logged-in state
+        navigate(from, { replace: true }); // Redirect to the intended route (or default to dashboard)
       }
     } catch (error) {
       console.error('Login error:', error);
-      console.log(error.response.data)
       alert('Invalid credentials');
     } finally {
       setLoading(false);
     }
+  
   };
 
   return (
@@ -73,15 +71,23 @@ const Login = () => {
 
           <div className="form-group">
             <label><FaLock /> Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              required
-            />
+            <div className="password-container">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                required
+              />
+              <button type="button" onClick={handlePasswordToggle} className="password-toggle">
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
           </div>
+
+          {/* Display error message */}
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
 
           <div className="auth-actions">
             <button type="submit" disabled={loading}>

@@ -61,13 +61,13 @@ const FuelList = () => {
         <table className="fuel-table">
           <thead>
             <tr>
-              <th><FaCar /> Vehicle</th>
-              <th><FaUser /> Driver</th>
-              <th><FaGasPump /> Fuel (L)</th>
-              <th><FaRupeeSign /> Amount</th>
-              <th><FaTachometerAlt /> Odometer</th>
-              <th><FaComment /> Comment</th>
-              <th><FaReceipt /> In Expense</th>
+              <th> Vehicle</th>
+              <th>  Driver</th>
+              <th>  Fuel (L)</th>
+              <th> Amount</th>
+              <th>  Odometer</th>
+              <th>  Comment</th>
+              <th>In Expense</th>
             </tr>
           </thead>
           <tbody>

@@ -22,7 +22,7 @@ const AddCustomer = () => {
     setIsSubmitting(true);
     
     try {
-      await axios.post("http://localhost:5000/api/addCustomer", customerData);
+      await axios.post("http://localhost:5000/api/addCustomers", customerData);
       alert("Customer added successfully!");
       // Reset form
       setCustomerData({
