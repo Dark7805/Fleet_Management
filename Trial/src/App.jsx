@@ -152,7 +152,7 @@ function AppContent() {
           />
 
           <Route
-            path="/remainders"
+            path="/reminders"
             element={
               <ProtectedRoute>
                 <Remainder />
@@ -160,7 +160,7 @@ function AppContent() {
             }
           />
           <Route
-            path="/remainders/add"
+            path="/reminders/add"
             element={
               <ProtectedRoute>
                 <AddRemainder />

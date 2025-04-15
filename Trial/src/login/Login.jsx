@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { FaUser, FaLock, FaEnvelope, FaSignInAlt } from 'react-icons/fa';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../components/AuthContext'; // make sure this path is correct
+import axios from 'axios';
+import { useAuth } from '../components/AuthContext'; // Assuming you have this AuthContext to manage authentication
 import './Auth.css';
 
 const Login = () => {
@@ -9,12 +10,11 @@ const Login = () => {
     email: '',
     password: ''
   });
-
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth(); // from AuthContext
-  const from = location.state?.from?.pathname || '/dashboard'; // fallback to dashboard
+  const { login } = useAuth(); // Assuming this context provides the login method for setting auth state
+  const from = location.state?.from?.pathname || '/dashboard'; // Default redirect to dashboard if no previous page
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,19 +25,26 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Replace with actual login API logic if needed
-      const { email, password } = formData;
+      // Make API call to your login endpoint (replace with your actual API URL)
+      const response = await axios.post('http://localhost:5000/api/login', formData);
 
-      if (email === 'admin@example.com' && password === 'admin') {
-        login(); // sets isAuthenticated to true
-        navigate(from, { replace: true }); // redirect to previous or dashboard
+      // Assuming the API returns a token after successful login
+      const { token } = response.data;
+
+      if (token) {
+        // Store the token in localStorage or sessionStorage
+        localStorage.setItem('token', token);
+
+        // Optionally, update your auth context or global state here
+        login(); // Assuming login sets isAuthenticated to true in context
+
+        navigate(from, { replace: true }); // Redirect user to previous page or default
         console.log('Login successful');
-      } else {
-        alert('Invalid credentials');
       }
     } catch (error) {
       console.error('Login error:', error);
-      alert('Login failed');
+      console.log(error.response.data)
+      alert('Invalid credentials');
     } finally {
       setLoading(false);
     }

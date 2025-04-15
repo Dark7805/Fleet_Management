@@ -6,7 +6,7 @@ import {
 import { LoadScript } from "@react-google-maps/api";
 import './CreateBooking.css';
 
-const GOOGLE_MAPS_API_KEY = "AIzaSyDl9Jv21Uuhu6u4SonFQu8gDXkJiAPGSx0";
+const GOOGLE_MAPS_API_KEY = "AIzaSyDUkq2hwjltBH-BkcZxVpRVPWuYL_0_uzI";
 
 const CreateTripForm = () => {
   const [formData, setFormData] = useState({
@@ -34,16 +34,17 @@ const CreateTripForm = () => {
     });
   }, []);
 
-  const onLoadAutocomplete = () => {
-    if (startRef.current && endRef.current && window.google) {
-      const fromAuto = new window.google.maps.places.Autocomplete(startRef.current);
+  const onLoadAutocomplete = (google) => {
+    // Initialize Autocomplete once the Google Maps script is loaded
+    if (startRef.current && endRef.current) {
+      const fromAuto = new google.maps.places.Autocomplete(startRef.current);
       fromAuto.setFields(["formatted_address"]);
       fromAuto.addListener("place_changed", () => {
         const place = fromAuto.getPlace();
         setFormData((prev) => ({ ...prev, startLocation: place?.formatted_address || "" }));
       });
 
-      const toAuto = new window.google.maps.places.Autocomplete(endRef.current);
+      const toAuto = new google.maps.places.Autocomplete(endRef.current);
       toAuto.setFields(["formatted_address"]);
       toAuto.addListener("place_changed", () => {
         const place = toAuto.getPlace();
@@ -98,15 +99,12 @@ const CreateTripForm = () => {
   };
 
   return (
-    // Check if the Google Maps API is already loaded to avoid duplicate loading
     <>
-      {typeof window !== 'undefined' && !window.google && (
-        <LoadScript
-          googleMapsApiKey={GOOGLE_MAPS_API_KEY}
-          libraries={["places"]}
-          onLoad={onLoadAutocomplete}
-        />
-      )}
+      <LoadScript
+        googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+        libraries={["places"]}
+        onLoad={() => onLoadAutocomplete(window.google)}
+      />
 
       <div className="trip-form-container">
         <div className="form-header">

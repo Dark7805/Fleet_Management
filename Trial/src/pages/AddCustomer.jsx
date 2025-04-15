@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { FaUser, FaPhone, FaEnvelope, FaMapMarkerAlt, FaPlus } from "react-icons/fa";
+import "./AddCustomer.css";
 
 const AddCustomer = () => {
   const [customerData, setCustomerData] = useState({
@@ -9,15 +11,20 @@ const AddCustomer = () => {
     address: "",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e) => {
     setCustomerData({ ...customerData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    
     try {
       await axios.post("http://localhost:5000/api/addCustomer", customerData);
       alert("Customer added successfully!");
+      // Reset form
       setCustomerData({
         name: "",
         mobile: "",
@@ -26,67 +33,88 @@ const AddCustomer = () => {
       });
     } catch (error) {
       console.error("Error adding customer:", error);
-      alert("Failed to add customer.");
+      alert("Failed to add customer");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="p-6 bg-black rounded-lg shadow-md max-w-2xl mx-auto mt-10">
-      <h2 className="text-xl font-semibold mb-4">Add Customer</h2>
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div>
-          <label className="block text-sm font-medium mb-1">Name</label>
-          <input
-            type="text"
-            name="name"
-            value={customerData.name}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
+    <div className="customer-form-container">
+      <div className="form-header">
+        <h2><FaUser /> Add New Customer</h2>
+        <p>Fill in the customer details below</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="customer-form">
+        <div className="form-grid">
+          <div className="form-group">
+            <label><FaUser /> Name</label>
+            <input
+              type="text"
+              name="name"
+              className="form-input"
+              value={customerData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label><FaPhone /> Mobile Number</label>
+            <input
+              type="tel"
+              name="mobile"
+              className="form-input"
+              value={customerData.mobile}
+              onChange={handleChange}
+              required
+              pattern="[0-9]{10}"
+              title="Please enter a 10-digit mobile number"
+            />
+          </div>
+
+          <div className="form-group">
+            <label><FaEnvelope /> Email</label>
+            <input
+              type="email"
+              name="email"
+              className="form-input"
+              value={customerData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group full-width">
+            <label><FaMapMarkerAlt /> Address</label>
+            <textarea
+              name="address"
+              className="form-input"
+              value={customerData.address}
+              onChange={handleChange}
+              rows="3"
+              required
+            />
+          </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Mobile Number</label>
-          <input
-            type="text"
-            name="mobile"
-            value={customerData.mobile}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={customerData.email}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium mb-1">Address</label>
-          <textarea
-            name="address"
-            value={customerData.address}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-
-        <div className="md:col-span-2 text-right">
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        <div className="form-actions">
+          <button 
+            type="submit" 
+            className="submit-btn"
+            disabled={isSubmitting}
           >
-            Add Customer
+            {isSubmitting ? (
+              <>
+                <span className="spinner"></span>
+                Adding Customer...
+              </>
+            ) : (
+              <>
+                <FaPlus /> Add Customer
+              </>
+            )}
           </button>
         </div>
       </form>

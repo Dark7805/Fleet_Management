@@ -8,14 +8,17 @@
   overflow: hidden;
 }
 body {
-  background-color: #fff1f1; /* <-- remove or change this */
+  background-color: #ffffff !important;
+  color: #000000;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .content {
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
-  background-color: #1e1e1e;
+  background-color: #ffffff;
   color: white;
 }
 /* Main Container */
