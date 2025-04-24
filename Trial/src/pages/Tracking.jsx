@@ -18,7 +18,7 @@ const TrackingMap = () => {
 
   // Function to fetch LatLng from Geocoding API
   const getLatLng = async (address) => {
-    const apiKey = "AIzaSyDUkq2hwjltBH-BkcZxVpRVPWuYL_0_uzI"; // Replace with your actual API key
+    const apiKey = ""; // Replace with your actual API key
     const response = await axios.get(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`
     );
@@ -76,7 +76,7 @@ const TrackingMap = () => {
   }, []);
 
   return (
-    <LoadScript googleMapsApiKey="AIzaSyDUkq2hwjltBH-BkcZxVpRVPWuYL_0_uzI">
+    <LoadScript googleMapsApiKey="">
       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={5}>
         {bookings.map((booking, index) => {
           const { startLocation, endLocation } = booking;
